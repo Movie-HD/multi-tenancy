@@ -17,6 +17,8 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Models\Organizacion; # <-- Add Model Tenant
+use App\Filament\Pages\Tenancy\RegisterTeam;
 
 class DashboardPanelProvider extends PanelProvider
 {
@@ -26,7 +28,10 @@ class DashboardPanelProvider extends PanelProvider
             ->default()
             ->id('dashboard')
             ->path('dashboard')
+            ->registration()
             ->login()
+            ->tenant(Organizacion::class, slugAttribute: 'slug')
+            ->tenantRegistration(RegisterTeam::class)
             ->colors([
                 'primary' => Color::Amber,
             ])

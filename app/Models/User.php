@@ -7,7 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasTenants;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Filament\Panel;
+use Illuminate\Support\Collection;
+
+class User extends Authenticatable implements FilamentUser, HasTenants
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -44,5 +51,26 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true; // Allow all users to access the panel, modify this according to your needs
+    }
+
+    # Metodos de multi-tenancy
+    public function organizacion(): BelongsToMany
+    {
+        return $this->belongsToMany(Organizacion::class);
+    }
+
+    public function getTenants(Panel $panel): Collection
+    {
+        return $this->organizacion;
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->organizacion()->whereKey($tenant)->exists();
     }
 }

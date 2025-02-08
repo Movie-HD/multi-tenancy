@@ -23,8 +23,7 @@ Asegúrate de tener instalado lo siguiente antes de comenzar:
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/tu-repositorio.git
-cd tu-repositorio
+git clone https://github.com/Movie-HD/multi-tenancy.git filament-demo && cd multi-tenancy
 ```
 
 ### 2. Instalar dependencias
@@ -39,7 +38,7 @@ npm install && npm run build
 Copia el archivo de entorno y configura las variables necesarias:
 
 ```bash
-cp .env.example .env
+cp .env.example .env && php artisan key:generate
 ```
 
 Edita el archivo `.env` y actualiza las credenciales de la base de datos.
@@ -50,10 +49,23 @@ Edita el archivo `.env` y actualiza las credenciales de la base de datos.
 php artisan key:generate
 ```
 
-### 5. Ejecutar migraciones y seeders
+### 5. Create an SQLite database
+
+```bash
+touch database/database.sqlite
+```
+
+### 6. Ejecutar migraciones y seeders
 
 ```bash
 php artisan migrate --seed
+php artisan migrate:fresh --seed
+```
+
+### 7. Create a symlink to the storage
+
+```bash
+php artisan storage:link
 ```
 
 ## Contribuciones

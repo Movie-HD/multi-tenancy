@@ -55,7 +55,12 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true; // Allow all users to access the panel, modify this according to your needs
+        return $panel->getId() === 'admin'
+            ? in_array($this->email, [
+                'test@example.com',
+                // agrega más emails autorizados
+              ])
+            : true; // Allow all users to access the panel, modify this according to your needs
     }
 
     # Metodos de multi-tenancy

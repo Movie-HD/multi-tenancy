@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use Filament\Facades\Filament; # Se agrega para obtener solo los roles del tenant actual
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,6 +15,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput; # Agregar si es un Input [Form]
 use Filament\Tables\Columns\TextColumn; # Agregar si es un Column [Table]
+use Filament\Forms\Components\Select; # Agregar si es un Select [Form]
+use Illuminate\Database\Eloquent\Model; # Se agrega para el Select [Form]
 
 class UserResource extends Resource
 {
@@ -31,6 +34,14 @@ class UserResource extends Resource
                     ->password()
                     ->required()
                     ->hiddenOn('edit'),
+                Select::make('roles')
+                    ->relationship('roles', 'name', modifyQueryUsing: fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant()))
+                    ->saveRelationshipsUsing(function (Model $record, $state) {
+                         $record->roles()->syncWithPivotValues($state, [config('permission.column_names.team_foreign_key') => getPermissionsTeamId()]);
+                    })
+                   ->multiple()
+                   ->preload()
+                   ->searchable(),
             ]);
     }
 
@@ -41,6 +52,7 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('email'),
+                TextColumn::make('roles.name'),
             ])
             ->filters([
                 //

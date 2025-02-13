@@ -32,6 +32,12 @@ class DashboardPanelProvider extends PanelProvider
             ->registration(TenantRegister::class)
             ->login()
             ->tenant(Organizacion::class, slugAttribute: 'slug')
+            ->tenantMiddleware([
+                \BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant::class,
+            ], isPersistent: true)
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+            ])
             ->tenantRegistration(RegisterTeam::class)
             ->colors([
                 'primary' => Color::Amber,

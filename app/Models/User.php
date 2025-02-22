@@ -12,6 +12,7 @@ use Filament\Models\Contracts\HasTenants;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -78,5 +79,11 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     public function canAccessTenant(Model $tenant): bool
     {
         return $this->organizacion()->whereKey($tenant)->exists();
+    }
+
+    # Metodo de relacion con sucursales
+    public function sucursales(): HasMany
+    {
+        return $this->hasMany(Sucursal::class);
     }
 }

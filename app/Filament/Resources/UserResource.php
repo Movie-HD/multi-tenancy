@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\Sucursal;
 use App\Models\User;
 use Filament\Facades\Filament; # Se agrega para obtener solo los roles del tenant actual
 use Filament\Forms;
@@ -42,6 +43,19 @@ class UserResource extends Resource
                    ->multiple()
                    ->preload()
                    ->searchable(),
+
+                // Muestra el campo solo si hay más de una sucursal en la organización
+                Select::make('sucursales')
+                   ->label('Sucursales')
+                   ->relationship('sucursales', 'nombre', modifyQueryUsing: fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant()) ) // Asegúrate de que la relación en User.php esté bien definida
+                   ->multiple()
+                   ->preload()
+                   ->searchable()
+                   ->required()
+                   ->visible(function () {
+                            $tenant = Filament::getTenant();
+                            return Sucursal::where('organizacion_id', $tenant->id)->count() > 1;
+                        }),
             ]);
     }
 
@@ -53,6 +67,7 @@ class UserResource extends Resource
                 TextColumn::make('name'),
                 TextColumn::make('email'),
                 TextColumn::make('roles.name'),
+                TextColumn::make('sucursales.nombre'),
             ])
             ->filters([
                 //

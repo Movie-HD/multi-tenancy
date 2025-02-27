@@ -29,4 +29,9 @@ class Organizacion extends Model
         return $this->hasMany(Sucursal::class);
     }
 
+    public function whatsAppInstances(): HasMany
+    {
+        return $this->hasMany(WhatsAppInstance::class);
+    }
+
 }

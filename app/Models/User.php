@@ -82,8 +82,8 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     }
 
     # Metodo de relacion con sucursales
-    public function sucursales(): HasMany
+    public function sucursales()
     {
-        return $this->hasMany(Sucursal::class);
+        return $this->belongsToMany(Sucursal::class);
     }
 }

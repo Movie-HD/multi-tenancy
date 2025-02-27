@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput; # Agregar si es un Input [Form]
 use Filament\Tables\Columns\TextColumn; # Agregar si es un Column [Table]
+use Filament\Forms\Components\Hidden; # Agregar si es un Hidden [Form]
 
 class SucursalResource extends Resource
 {
@@ -25,7 +26,7 @@ class SucursalResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('organizacion_id')
+                Hidden::make('organizacion_id')
                     ->default(auth()->user()->organizacion_id),
 
                 TextInput::make('nombre')

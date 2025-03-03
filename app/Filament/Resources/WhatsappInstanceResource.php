@@ -171,7 +171,7 @@ class WhatsappInstanceResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\TemplatesRelationManager::class,
         ];
     }
 

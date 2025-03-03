@@ -16,7 +16,8 @@ class EditWhatsappInstance extends EditRecord
             Actions\DeleteAction::make()
                 ->before(function ($record) {
                     WhatsappInstanceResource::deleteInstance($record);
-                }),
+                })
+                ->hidden(fn ($record) => $record->templates()->where('is_default', true)->exists()),
         ];
     }
 }

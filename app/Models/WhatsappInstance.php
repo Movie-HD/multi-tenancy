@@ -28,4 +28,9 @@ class WhatsappInstance extends Model
     {
         return $this->belongsToMany(Sucursal::class);
     }
+
+    public function templates() {
+        return $this->hasMany(WhatsappTemplate::class);
+    }
+
 }

@@ -57,18 +57,6 @@ class WhatsappInstanceResource extends Resource
                     ->visible(fn ($record) => $record && $record->qr_code)
                     ->label('Código QR'),
 
-                Forms\Components\Actions::make([
-                    Forms\Components\Actions\Action::make('reset_instance')
-                        ->label('Reiniciar conexión')
-                        ->icon('heroicon-o-arrow-path')
-                        ->action(function ($record) {
-                            return static::resetInstance($record);
-                        })
-                        ->visible(fn ($record) => $record && in_array($record->status, ['pending', 'disconnected', 'qr_expired']))
-                        ->color('primary')
-                        ->button(),
-                ])
-                ->visible(fn ($record) => $record && $record->qr_code),
             ]);
     }
 
@@ -165,7 +153,7 @@ class WhatsappInstanceResource extends Resource
                         static::deleteInstance($record);
                     }),
             ])
-            ->poll('10s'); // Actualizar la tabla cada 10 segundos
+            ->poll('20s'); // Actualizar la tabla cada 10 segundos
     }
 
     public static function getRelations(): array
@@ -184,7 +172,7 @@ class WhatsappInstanceResource extends Resource
         ];
     }
 
-    protected static function getConnectionState(WhatsappInstance $instance): ?array
+    public static function getConnectionState(WhatsappInstance $instance): ?array
     {
          try {
              $baseUrl = config('services.evolution.base_url');
@@ -270,7 +258,7 @@ class WhatsappInstanceResource extends Resource
         }
     }
 
-    protected static function resetInstance(WhatsappInstance $instance): void
+    public static function resetInstance(WhatsappInstance $instance): void
     {
         try {
             $baseUrl = config('services.evolution.base_url');

@@ -49,8 +49,7 @@ class TemplatesRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->hidden(fn ($records) => $records->contains('is_default', true)),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

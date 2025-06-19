@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\TenantLogin;
 use App\Filament\Pages\Auth\TenantRegister;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -30,8 +31,9 @@ class DashboardPanelProvider extends PanelProvider
             ->id('dashboard')
             ->path('dashboard')
             ->registration(TenantRegister::class)
-            ->login()
+            ->login(TenantLogin::class)
             ->tenant(Organizacion::class, slugAttribute: 'slug')
+            ->tenantDomain('{tenant:slug}.multi-tenancy.test')
             ->tenantMiddleware([
                 \BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant::class,
             ], isPersistent: true)

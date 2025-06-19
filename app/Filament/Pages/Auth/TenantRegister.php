@@ -14,15 +14,23 @@ class TenantRegister extends Register
 
     public function mount(): void
     {
-        // Obtiene el slug del tenant de la URL
-        $this->tenantSlug = request()->segment(2);
-
-        // Si es el registro inicial (/dashboard/register), permitir continuar
-        if ($this->tenantSlug === 'register') {
+        // Obtener el host actual de la solicitud
+        $host = request()->getHost();
+        
+        // Verificar si estamos en el dominio principal (sin tenant)
+        if ($host === 'multi-tenancy.test') {
+            $this->tenantSlug = 'register';
             parent::mount();
             return;
         }
-
+        
+        // Extraer el slug del tenant del subdominio
+        // Formato esperado: {tenant-slug}.multi-tenancy.test
+        $parts = explode('.', $host);
+        if (count($parts) >= 3) {
+            $this->tenantSlug = $parts[0];
+        }
+        
         // Para rutas de tenant, validar que exista
         if (!$this->tenantSlug || !Organizacion::where('slug', $this->tenantSlug)->exists()) {
             abort(404, 'Organización no encontrada');

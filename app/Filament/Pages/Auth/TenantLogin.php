@@ -17,7 +17,7 @@ class TenantLogin extends Login
     {
         // Obtener el host actual
         $host = request()->getHost();
-        $isMainDomain = $host === 'multi-tenancy.test';
+        $isMainDomain = $host === 'desarrollodigital.app';
 
         // Si estamos en un subdominio, verificar que el usuario pertenezca a este tenant
         if (!$isMainDomain) {
@@ -104,7 +104,7 @@ class TenantLogin extends Login
     {
         $host = request()->getHost();
 
-        if ($host !== 'multi-tenancy.test') {
+        if ($host !== 'desarrollodigital.app') {
             // Estamos en un subdominio de tenant
             $parts = explode('.', $host);
             $slug = $parts[0] ?? null;

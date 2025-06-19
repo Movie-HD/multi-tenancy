@@ -33,7 +33,7 @@ class DashboardPanelProvider extends PanelProvider
             ->registration(TenantRegister::class)
             ->login(TenantLogin::class)
             ->tenant(Organizacion::class, slugAttribute: 'slug')
-            ->tenantDomain('{tenant:slug}.multi-tenancy.test')
+            ->tenantDomain('{tenant:slug}.desarrollodigital.app')
             ->tenantMiddleware([
                 \BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant::class,
             ], isPersistent: true)

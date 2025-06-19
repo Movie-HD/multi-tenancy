@@ -18,7 +18,7 @@ class TenantRegister extends Register
         $host = request()->getHost();
         
         // Verificar si estamos en el dominio principal (sin tenant)
-        if ($host === 'multi-tenancy.test') {
+        if ($host === 'desarrollodigital.app') {
             $this->tenantSlug = 'register';
             parent::mount();
             return;

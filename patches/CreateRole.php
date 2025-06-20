@@ -53,7 +53,7 @@ class CreateRole extends CreateRecord
     protected function beforeCreate(): void
     {
         $existingRole = \Spatie\Permission\Models\Role::query()
-            ->where('name', $this->data['name'])
+            ->whereRaw('LOWER(name) = ?', [strtolower($this->data['name'])])
             ->where('team_id', \Filament\Facades\Filament::getTenant()->id)
             ->first();
 

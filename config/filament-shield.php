@@ -39,8 +39,11 @@ return [
             'create',
             'update',
             'restore',
+            'restore_any',
             'delete',
             'delete_any',
+            'force_delete',
+            'force_delete_any',
         ],
 
         'page' => 'page',

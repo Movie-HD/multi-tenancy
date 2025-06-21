@@ -20,6 +20,8 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\Organizacion; # <-- Add Model Tenant
 use App\Filament\Pages\Tenancy\RegisterTeam;
+use App\Filament\Pages\Tenancy\EditTeamProfile;
+use App\Filament\Pages\Auth\EditProfile;
 
 class DashboardPanelProvider extends PanelProvider
 {
@@ -32,9 +34,11 @@ class DashboardPanelProvider extends PanelProvider
             ->registration(TenantRegister::class)
             ->login()
             ->tenant(Organizacion::class, slugAttribute: 'slug')
+            ->tenantProfile(EditTeamProfile::class)
             ->tenantMiddleware([
                 \BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant::class,
             ], isPersistent: true)
+            ->profile(EditProfile::class)
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
             ])

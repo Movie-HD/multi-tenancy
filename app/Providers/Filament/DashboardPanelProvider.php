@@ -22,6 +22,8 @@ use App\Models\Organizacion; # <-- Add Model Tenant
 use App\Filament\Pages\Tenancy\RegisterTeam;
 use App\Filament\Pages\Tenancy\EditTeamProfile;
 use App\Filament\Pages\Auth\EditProfile;
+use Filament\Navigation\MenuItem;
+use App\Http\Middleware\PreventMultipleTenants;
 
 class DashboardPanelProvider extends PanelProvider
 {
@@ -43,6 +45,9 @@ class DashboardPanelProvider extends PanelProvider
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
             ])
             ->tenantRegistration(RegisterTeam::class)
+            ->tenantMenuItems([
+                'register' => MenuItem::make()->hidden(true),
+            ])
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -66,6 +71,7 @@ class DashboardPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                PreventMultipleTenants::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

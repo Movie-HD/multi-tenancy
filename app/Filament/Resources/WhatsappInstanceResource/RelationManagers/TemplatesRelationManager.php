@@ -22,6 +22,7 @@ class TemplatesRelationManager extends RelationManager
             ->schema([
                 TextInput::make('nombre')
                     ->required()
+                    # Deshabilita la edición del nombre si la plantilla es "is_default"
                     ->disabled(fn ($record) => $record?->is_default),
                 TextInput::make('mensaje')
                     ->required(),
@@ -45,12 +46,15 @@ class TemplatesRelationManager extends RelationManager
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
+                    # Oculta la acción de eliminar para plantillas "is_default"
                     ->visible(fn ($record) => !$record->is_default),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            # Deshabilita la selección de checkboxes para plantillas "is_default" en acciones masivas
+            ->checkIfRecordIsSelectableUsing(fn ($record) => !$record->is_default);
     }
 }

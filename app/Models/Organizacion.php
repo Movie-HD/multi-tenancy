@@ -33,5 +33,9 @@ class Organizacion extends Model
     {
         return $this->hasMany(WhatsAppInstance::class);
     }
+    public function tasks()
+    {
+        return $this->hasMany(\App\Models\Task::class, 'organizacion_id');
+    }
 
 }

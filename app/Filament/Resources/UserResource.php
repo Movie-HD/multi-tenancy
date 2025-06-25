@@ -48,6 +48,10 @@ class UserResource extends Resource
                    ->preload()
                    ->searchable(),
 
+                Forms\Components\Toggle::make('can_view_all')
+                   ->label('Puede ver todos los registros')
+                   ->default(false),
+
                 // Muestra el campo solo si hay más de una sucursal en la organización
                 Select::make('sucursales')
                    ->label('Sucursales')

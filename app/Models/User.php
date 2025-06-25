@@ -30,6 +30,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         'name',
         'email',
         'password',
+        'can_view_all',
     ];
 
     /**
@@ -52,6 +53,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'can_view_all' => 'boolean',
         ];
     }
 

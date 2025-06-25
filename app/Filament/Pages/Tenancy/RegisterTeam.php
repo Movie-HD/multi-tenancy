@@ -45,6 +45,10 @@ class RegisterTeam extends RegisterTenant
         // ✅ Asegurar que 'team_id' no sea nulo
         $user->roles()->attach($role->id, ['team_id' => $team->id]);
 
+        // **Activar can_view_all para el usuario**
+        $user->can_view_all = true;
+        $user->save();
+
         // Crear sucursal principal
         $sucursal = $team->sucursals()->create([
             'nombre' => 'Principal',

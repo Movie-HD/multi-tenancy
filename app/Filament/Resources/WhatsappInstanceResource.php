@@ -49,8 +49,12 @@ class WhatsappInstanceResource extends Resource
                     ->preload()
                     ->helperText('Selecciona las sucursales que usarán este número')
                     ->visible(function () {
+                        $user = auth()->user();
                         $tenant = Filament::getTenant();
-                        return Sucursal::where('organizacion_id', $tenant->id)->count() > 1;
+
+                        return $user->sucursales()
+                            ->where('organizacion_id', $tenant->id)
+                            ->count() > 1;
                     }),
 
                 Forms\Components\View::make('filament.components.qr-code')

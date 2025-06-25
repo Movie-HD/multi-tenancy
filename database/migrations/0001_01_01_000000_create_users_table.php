@@ -18,6 +18,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+
+            # can_view_all
+            $table->boolean('can_view_all')->default(false);
+
             $table->timestamps();
         });
 

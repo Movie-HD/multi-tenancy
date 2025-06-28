@@ -95,7 +95,7 @@ class WhatsappInstancePolicy
      */
     public function replicate(User $user, WhatsappInstance $whatsappInstance): bool
     {
-        return $user->can('replicate_whatsapp::instance');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,6 +103,6 @@ class WhatsappInstancePolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_whatsapp::instance');
+        return $user->can('{{ Reorder }}');
     }
 }

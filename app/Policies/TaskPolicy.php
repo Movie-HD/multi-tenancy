@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Sucursal;
+use App\Models\Task;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class SucursalPolicy
+class TaskPolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +15,15 @@ class SucursalPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_sucursal');
+        return $user->can('view_any_task');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Sucursal $sucursal): bool
+    public function view(User $user, Task $task): bool
     {
-        return $user->can('view_sucursal');
+        return $user->can('view_task');
     }
 
     /**
@@ -31,23 +31,23 @@ class SucursalPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_sucursal');
+        return $user->can('create_task');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Sucursal $sucursal): bool
+    public function update(User $user, Task $task): bool
     {
-        return $user->can('update_sucursal');
+        return $user->can('update_task');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Sucursal $sucursal): bool
+    public function delete(User $user, Task $task): bool
     {
-        return $user->can('delete_sucursal');
+        return $user->can('delete_task');
     }
 
     /**
@@ -55,15 +55,15 @@ class SucursalPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_sucursal');
+        return $user->can('delete_any_task');
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, Sucursal $sucursal): bool
+    public function forceDelete(User $user, Task $task): bool
     {
-        return $user->can('force_delete_sucursal');
+        return $user->can('force_delete_task');
     }
 
     /**
@@ -71,15 +71,15 @@ class SucursalPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_sucursal');
+        return $user->can('force_delete_any_task');
     }
 
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, Sucursal $sucursal): bool
+    public function restore(User $user, Task $task): bool
     {
-        return $user->can('restore_sucursal');
+        return $user->can('restore_task');
     }
 
     /**
@@ -87,13 +87,13 @@ class SucursalPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_sucursal');
+        return $user->can('restore_any_task');
     }
 
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, Sucursal $sucursal): bool
+    public function replicate(User $user, Task $task): bool
     {
         return $user->can('{{ Replicate }}');
     }

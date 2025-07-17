@@ -12,6 +12,11 @@ class Organizacion extends Model
     protected $fillable = [
         'name',
         'slug',
+        'country',
+        'timezone',
+        'tax_id_type',
+        'tax_id_number',
+        'tax_rate_type'
     ];
 
     public function users(): BelongsToMany
@@ -33,6 +38,17 @@ class Organizacion extends Model
     {
         return $this->hasMany(WhatsAppInstance::class);
     }
+
+    public function taxRates()
+    {
+        return $this->hasMany(TaxRate::class);
+    }
+
+    public function currencies()
+    {
+        return $this->hasMany(Currency::class);
+    }
+
     public function tasks()
     {
         return $this->hasMany(\App\Models\Task::class, 'organizacion_id');

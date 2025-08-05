@@ -29,7 +29,7 @@ class RegisterTeam extends RegisterTenant
     {
         $team = Organizacion::create($data);
         $user = auth()->user(); // Obtener usuario autenticado
-        $team->users()->attach($user);
+        $team->users()->attach($user, ['is_owner' => true]);
 
         // ✅ Crear el rol si no existe y asociarlo a un team_id
         $role = Role::create([

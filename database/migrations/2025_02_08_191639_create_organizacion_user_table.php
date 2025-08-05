@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('organizacion_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->boolean('is_owner')->default(false);
             $table->timestamps();
         });
     }

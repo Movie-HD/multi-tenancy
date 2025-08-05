@@ -47,6 +47,12 @@ class DashboardPanelProvider extends PanelProvider
             ->tenantRegistration(RegisterTeam::class)
             ->tenantMenuItems([
                 'register' => MenuItem::make()->hidden(true),
+                'profile' => MenuItem::make()->hidden(fn () => ! (
+                    \Filament\Facades\Filament::getTenant()?->users()
+                        ->wherePivot('is_owner', true)
+                        ->where('users.id', auth()->id())
+                        ->exists()
+                )),
             ])
             ->colors([
                 'primary' => Color::Amber,

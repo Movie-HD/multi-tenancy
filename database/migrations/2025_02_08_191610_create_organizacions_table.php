@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name'); # Nombre de la Empresa o Negocio
             $table->string('slug')->unique();
-            $table->string('country'); # Pais
-            $table->string('timezone'); # Zona Horaria
-            $table->string('tax_id_type'); # Tipo de Identificacion Fiscal (RUC, NIT, etc.)
-            $table->string('tax_id_number'); # Numero de Identificacion Fiscal
-            $table->string('tax_rate_type'); # Tipo de Tasa de Impuesto (IGV, IVA, etc.)
+            $table->string('country')->nullable(); # Pais
+            $table->string('timezone')->nullable(); # Zona Horaria
+            $table->string('tax_id_type')->nullable(); # Tipo de Identificacion Fiscal (RUC, NIT, etc.)
+            $table->string('tax_id_number')->nullable(); # Numero de Identificacion Fiscal
+            $table->string('tax_rate_type')->nullable(); # Tipo de Tasa de Impuesto (IGV, IVA, etc.)
             # tax_rate_percentage
             # currencies
             $table->timestamps();

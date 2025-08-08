@@ -5,6 +5,8 @@ namespace App\Filament\Pages\Tenancy;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Tenancy\EditTenantProfile;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Actions\Action;
 
 class EditTeamProfile extends EditTenantProfile
 {
@@ -43,6 +45,27 @@ class EditTeamProfile extends EditTenantProfile
             ->schema([
                 TextInput::make('name'),
                 TextInput::make('slug'),
+                Repeater::make('sucursals')
+                    ->relationship('sucursals')
+                    ->schema([
+                        TextInput::make('nombre')->label('Nombre')->required(),
+                        TextInput::make('direccion')->label('Dirección'),
+                        TextInput::make('telefono')->label('Teléfono'),
+                        TextInput::make('email')->label('Email'),
+                        TextInput::make('web')->label('Web'),
+                    ])
+                    ->label('Sucursales')
+                    ->hiddenLabel()
+                    ->columns(2)
+                    ->addable(false)
+                    ->addActionLabel('Agregar sucursal')
+                    ->deleteAction(
+                        fn (Action $action) => $action->requiresConfirmation(),
+                    )
+                    # No filtramos por organizacion(tenant) ya que el Repeater solo muestra
+                    # y manipula sucursales del tenant (organización) actual,
+                    # gracias a la relación ->relationship('sucursals') 
+                    ->deletable(fn ($record) => $record->sucursals()->count() > 1),
             ]);
     }
 }

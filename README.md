@@ -35,7 +35,7 @@ npm install && npm run build
 
 ### 3. Configurar el entorno
 
-Copia el archivo de entorno y configura las variables necesarias:
+Copia el archivo de entorno y configura las variables necesarias, y genera la clave de la aplicación:
 
 ```bash
 cp .env.example .env && php artisan key:generate
@@ -43,23 +43,23 @@ cp .env.example .env && php artisan key:generate
 
 Edita el archivo `.env` y actualiza las credenciales de la base de datos.
 
-### 4. Generar la clave de la aplicación
-
-```bash
-php artisan key:generate
-```
-
-### 5. Create an SQLite database
+### 4. Create an SQLite database
 
 ```bash
 touch database/database.sqlite
 ```
 
-### 6. Ejecutar migraciones y seeders
+### 5. Ejecutar migraciones y seeders
 
 ```bash
 php artisan migrate --seed
 php artisan migrate:fresh --seed
+```
+
+### 6. Generamos los permisos de Filament Shield
+
+```bash
+php artisan shield:generate --all
 ```
 
 ### 7. Create a symlink to the storage

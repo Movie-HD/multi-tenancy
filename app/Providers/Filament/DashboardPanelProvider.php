@@ -30,6 +30,8 @@ use App\Filament\Pages\Tenancy\EditTeamProfile;
 use App\Filament\Pages\Auth\EditProfile;
 use Filament\Navigation\MenuItem;
 use App\Http\Middleware\PreventMultipleTenants;
+use Filament\Actions\Action;
+use App\Http\Middleware\ScopePermissionsPerTenant;
 
 class DashboardPanelProvider extends PanelProvider
 {
@@ -52,13 +54,15 @@ class DashboardPanelProvider extends PanelProvider
             ])
             ->tenantRegistration(RegisterTeam::class)
             ->tenantMenuItems([
-                'register' => MenuItem::make()->hidden(true),
-                'profile' => MenuItem::make()->hidden(fn () => ! (
-                    Filament::getTenant()?->users()
-                        ->wherePivot('is_owner', true)
-                        ->where('users.id', auth()->id())
-                        ->exists()
-                )),
+                'register' => fn(Action $action) => $action
+                    ->hidden(),
+                'profile' => fn(Action $action) => $action
+                    ->hidden(fn() => !(
+                        Filament::getTenant()?->users()
+                            ->wherePivot('is_owner', true)
+                            ->where('users.id', auth()->id())
+                            ->exists()
+                    )),
             ])
             ->colors([
                 'primary' => Color::Amber,
@@ -84,6 +88,7 @@ class DashboardPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
                 PreventMultipleTenants::class,
+                ScopePermissionsPerTenant::class # Middleware para FilamentShield por cache de permisos por tenant [Cristian].
             ])
             ->authMiddleware([
                 Authenticate::class,

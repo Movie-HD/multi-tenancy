@@ -2,10 +2,16 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Filters\Filter;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\TaskResource\Pages\ListTasks;
+use App\Filament\Resources\TaskResource\Pages\CreateTask;
+use App\Filament\Resources\TaskResource\Pages\EditTask;
 use App\Filament\Resources\TaskResource\Pages;
 use App\Models\Task;
-
-use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
@@ -25,12 +31,12 @@ class TaskResource extends Resource
 {
     protected static ?string $model = Task::class;
 
-    protected static ?string $navigationIcon = "heroicon-s-rectangle-stack";
+    protected static string | \BackedEnum | null $navigationIcon = "heroicon-s-rectangle-stack";
     protected static ?string $tenantRelationshipName = "tasks";
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form->schema([
+        return $schema->components([
             TextInput::make("title")
                 ->label("Título")
                 ->required()
@@ -117,7 +123,7 @@ class TaskResource extends Resource
                             Auth::user()->can_view_all
                     ),
 
-                Tables\Filters\Filter::make("completed")
+                Filter::make("completed")
                     ->label("Completadas")
                     ->query(
                         fn(Builder $query): Builder => $query->where(
@@ -126,7 +132,7 @@ class TaskResource extends Resource
                         )
                     ),
 
-                Tables\Filters\Filter::make("pending")
+                Filter::make("pending")
                     ->label("Pendientes")
                     ->query(
                         fn(Builder $query): Builder => $query->where(
@@ -135,11 +141,11 @@ class TaskResource extends Resource
                         )
                     ),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([Tables\Actions\DeleteBulkAction::make()]);
+            ->toolbarActions([DeleteBulkAction::make()]);
     }
 
     public static function getRelations(): array
@@ -175,9 +181,9 @@ class TaskResource extends Resource
     public static function getPages(): array
     {
         return [
-            "index" => Pages\ListTasks::route("/"),
-            "create" => Pages\CreateTask::route("/create"),
-            "edit" => Pages\EditTask::route("/{record}/edit"),
+            "index" => ListTasks::route("/"),
+            "create" => CreateTask::route("/create"),
+            "edit" => EditTask::route("/{record}/edit"),
         ];
     }
 }

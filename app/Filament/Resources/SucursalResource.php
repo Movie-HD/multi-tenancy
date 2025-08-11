@@ -2,11 +2,24 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreBulkAction;
+use App\Filament\Resources\SucursalResource\Pages\ListSucursals;
+use App\Filament\Resources\SucursalResource\Pages\CreateSucursal;
+use App\Filament\Resources\SucursalResource\Pages\EditSucursal;
 use App\Filament\Resources\SucursalResource\Pages;
 use App\Filament\Resources\SucursalResource\RelationManagers;
 use App\Models\Sucursal;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,12 +33,12 @@ class SucursalResource extends Resource
 {
     protected static ?string $model = Sucursal::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Hidden::make('organizacion_id')
                     ->default(auth()->user()->organizacion_id),
 
@@ -58,21 +71,21 @@ class SucursalResource extends Resource
                     ->label('Creado'),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
-                    Tables\Actions\ForceDeleteAction::make(),
-                    Tables\Actions\RestoreAction::make(),
+            ->recordActions([
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make(),
+                    ForceDeleteAction::make(),
+                    RestoreAction::make(),
                 ]),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -95,9 +108,9 @@ class SucursalResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSucursals::route('/'),
-            'create' => Pages\CreateSucursal::route('/create'),
-            'edit' => Pages\EditSucursal::route('/{record}/edit'),
+            'index' => ListSucursals::route('/'),
+            'create' => CreateSucursal::route('/create'),
+            'edit' => EditSucursal::route('/{record}/edit'),
         ];
     }
 }

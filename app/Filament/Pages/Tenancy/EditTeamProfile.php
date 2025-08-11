@@ -2,18 +2,19 @@
 
 namespace App\Filament\Pages\Tenancy;
 
+use Filament\Facades\Filament;
+use Filament\Schemas\Schema;
+use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Pages\Tenancy\EditTenantProfile;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Actions\Action;
 
 class EditTeamProfile extends EditTenantProfile
 {
 
     public function mount(): void
     {
-        $organizacion = \Filament\Facades\Filament::getTenant();
+        $organizacion = Filament::getTenant();
 
         $isOwner = $organizacion
             ->users()
@@ -39,10 +40,10 @@ class EditTeamProfile extends EditTenantProfile
         return 'Team profile';
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('name'),
                 TextInput::make('slug'),
                 Repeater::make('sucursals')

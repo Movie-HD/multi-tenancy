@@ -51,7 +51,7 @@ class Organizacion extends Model
 
     public function tasks()
     {
-        return $this->hasMany(\App\Models\Task::class, 'organizacion_id');
+        return $this->hasMany(Task::class, 'organizacion_id');
     }
 
 }

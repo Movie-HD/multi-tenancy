@@ -7,13 +7,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "bezhansalleh/filament-shield": "^3.3",
-        "filament/filament": "^3.2",
+        "bezhansalleh/filament-shield": "^4.0@beta",
+        "filament/filament": "^4.0",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "filament/upgrade": "^4.0",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
@@ -37,9 +38,7 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
-            "@php artisan filament:upgrade",
-            "php -r \"file_exists('patches/CreateRole.php') && copy('patches/CreateRole.php', 'vendor/bezhansalleh/filament-shield/src/Resources/RoleResource/Pages/CreateRole.php');\"",
-            "php -r \"file_exists('patches/RoleResource.php') && copy('patches/RoleResource.php', 'vendor/bezhansalleh/filament-shield/src/Resources/RoleResource.php');\""
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
@@ -71,6 +70,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "beta",
     "prefer-stable": true
 }

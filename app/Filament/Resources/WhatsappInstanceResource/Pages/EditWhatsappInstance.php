@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\WhatsappInstanceResource\Pages;
 
+use Filament\Actions\Action;
+use Exception;
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\WhatsappInstanceResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
@@ -99,7 +102,7 @@ class EditWhatsappInstance extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('connection_status')
+            Action::make('connection_status')
                 ->label(function () {
                     $statusLabels = [
                         'connected' => '🟢 Conectado',
@@ -129,7 +132,7 @@ class EditWhatsappInstance extends EditRecord
                 })
                 ->disabled(),
 
-            Actions\Action::make('test_connection')
+            Action::make('test_connection')
                 ->label('Probar Conexión')
                 ->icon('heroicon-o-paper-airplane')
                 ->action(function () {
@@ -153,9 +156,9 @@ class EditWhatsappInstance extends EditRecord
                                 ->title('Mensaje de prueba enviado')
                                 ->send();
                         } else {
-                            throw new \Exception('Error al enviar mensaje: ' . $response->body());
+                            throw new Exception('Error al enviar mensaje: ' . $response->body());
                         }
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         Log::error('Error en prueba de conexión', [
                             'error' => $e->getMessage()
                         ]);
@@ -169,7 +172,7 @@ class EditWhatsappInstance extends EditRecord
                 })
                 ->visible(fn () => $this->getRecord()->status === 'connected'),
 
-            Actions\Action::make('reset_instance')
+            Action::make('reset_instance')
                 ->label('Reiniciar conexión')
                 ->icon('heroicon-o-arrow-path')
                 ->action(function () {
@@ -178,7 +181,7 @@ class EditWhatsappInstance extends EditRecord
                 ->visible(fn () => in_array($this->getRecord()->status, ['pending', 'disconnected', 'qr_expired']))
                 ->color('primary'),
 
-            Actions\DeleteAction::make()
+            DeleteAction::make()
                 ->before(function ($record) {
                     WhatsappInstanceResource::deleteInstance($record);
                 }),

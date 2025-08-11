@@ -2,6 +2,12 @@
 
 namespace App\Providers\Filament;
 
+use BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\Facades\Filament;
+use Filament\Pages\Dashboard;
+use Filament\Widgets\AccountWidget;
+use Filament\Widgets\FilamentInfoWidget;
 use App\Filament\Pages\Auth\TenantRegister;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -38,17 +44,17 @@ class DashboardPanelProvider extends PanelProvider
             ->tenant(Organizacion::class, slugAttribute: 'slug')
             ->tenantProfile(EditTeamProfile::class)
             ->tenantMiddleware([
-                \BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant::class,
+                SyncShieldTenant::class,
             ], isPersistent: true)
             ->profile(EditProfile::class)
             ->plugins([
-                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                FilamentShieldPlugin::make(),
             ])
             ->tenantRegistration(RegisterTeam::class)
             ->tenantMenuItems([
                 'register' => MenuItem::make()->hidden(true),
                 'profile' => MenuItem::make()->hidden(fn () => ! (
-                    \Filament\Facades\Filament::getTenant()?->users()
+                    Filament::getTenant()?->users()
                         ->wherePivot('is_owner', true)
                         ->where('users.id', auth()->id())
                         ->exists()
@@ -60,12 +66,12 @@ class DashboardPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                AccountWidget::class,
+                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

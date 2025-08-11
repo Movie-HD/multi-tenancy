@@ -2,12 +2,21 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\View;
+use Filament\Actions\Action;
+use Exception;
+use Filament\Actions\DeleteAction;
+use App\Filament\Resources\WhatsappInstanceResource\RelationManagers\TemplatesRelationManager;
+use App\Filament\Resources\WhatsappInstanceResource\Pages\ListWhatsappInstances;
+use App\Filament\Resources\WhatsappInstanceResource\Pages\CreateWhatsappInstance;
+use App\Filament\Resources\WhatsappInstanceResource\Pages\EditWhatsappInstance;
 use App\Filament\Resources\WhatsappInstanceResource\Pages;
 use App\Filament\Resources\WhatsappInstanceResource\RelationManagers;
 use App\Models\Sucursal;
 use App\Models\WhatsappInstance;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -24,12 +33,12 @@ class WhatsappInstanceResource extends Resource
 {
     protected static ?string $model = WhatsappInstance::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('phone_number')
                     ->label('Número de WhatsApp')
                     ->required()
@@ -40,7 +49,7 @@ class WhatsappInstanceResource extends Resource
                     ->rules(['regex:/^[0-9]{10,15}$/'])
                     ->helperText('Ingresa el número sin espacios ni caracteres especiales'),
 
-                Forms\Components\Select::make('sucursales')
+                Select::make('sucursales')
                     ->relationship('sucursales', 'nombre', modifyQueryUsing: fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant()) )
                     ->multiple()
                     ->required()
@@ -57,7 +66,7 @@ class WhatsappInstanceResource extends Resource
                             ->count() > 1;
                     }),
 
-                Forms\Components\View::make('filament.components.qr-code')
+                View::make('filament.components.qr-code')
                     ->visible(fn ($record) => $record && $record->qr_code)
                     ->label('Código QR'),
 
@@ -112,8 +121,8 @@ class WhatsappInstanceResource extends Resource
                     ->dateTime()
                     ->sortable(),
             ])
-            ->actions([
-                Tables\Actions\Action::make('test_connection')
+            ->recordActions([
+                Action::make('test_connection')
                     ->label('Probar Conexión')
                     ->icon('heroicon-o-paper-airplane')
                     ->action(function (WhatsappInstance $record) {
@@ -136,9 +145,9 @@ class WhatsappInstanceResource extends Resource
                                     ->title('Mensaje de prueba enviado')
                                     ->send();
                             } else {
-                                throw new \Exception('Error al enviar mensaje: ' . $response->body());
+                                throw new Exception('Error al enviar mensaje: ' . $response->body());
                             }
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             Log::error('Error en prueba de conexión', [
                                 'error' => $e->getMessage()
                             ]);
@@ -152,7 +161,7 @@ class WhatsappInstanceResource extends Resource
                     })
                     ->visible(fn ($record) => $record->status === 'connected'),
 
-                Tables\Actions\DeleteAction::make()
+                DeleteAction::make()
                     ->before(function (WhatsappInstance $record) {
                         static::deleteInstance($record);
                     }),
@@ -163,16 +172,16 @@ class WhatsappInstanceResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\TemplatesRelationManager::class,
+            TemplatesRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListWhatsappInstances::route('/'),
-            'create' => Pages\CreateWhatsappInstance::route('/create'),
-            'edit' => Pages\EditWhatsappInstance::route('/{record}/edit'),
+            'index' => ListWhatsappInstances::route('/'),
+            'create' => CreateWhatsappInstance::route('/create'),
+            'edit' => EditWhatsappInstance::route('/{record}/edit'),
         ];
     }
 
@@ -197,7 +206,7 @@ class WhatsappInstanceResource extends Resource
                  return $response->json();
              }
 
-         } catch (\Exception $e) {
+         } catch (Exception $e) {
              Log::error('Error al obtener estado de conexión', [
                  'error' => $e->getMessage(),
                  'instance' => $instance->id
@@ -246,10 +255,10 @@ class WhatsappInstanceResource extends Resource
                         ->send();
                 }
             } else {
-                throw new \Exception('Error en la respuesta: ' . $response->body());
+                throw new Exception('Error en la respuesta: ' . $response->body());
             }
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error al generar QR', [
                 'error' => $e->getMessage()
             ]);
@@ -297,7 +306,7 @@ class WhatsappInstanceResource extends Resource
                 ]);
 
                 if (!$response->successful()) {
-                    throw new \Exception('Error al reiniciar la instancia');
+                    throw new Exception('Error al reiniciar la instancia');
                 }
 
                 // Si el reinicio fue exitoso, generamos un nuevo QR
@@ -310,7 +319,7 @@ class WhatsappInstanceResource extends Resource
                 ->body('Se ha generado un nuevo código QR')
                 ->send();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error al reiniciar instancia', [
                 'error' => $e->getMessage(),
                 'instance' => $instance->id,
@@ -340,7 +349,7 @@ class WhatsappInstanceResource extends Resource
                     'instance_id' => $instance->id
                 ]);
 
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Log::error('Error al eliminar instancia de WhatsApp', [
                     'error' => $e->getMessage(),
                     'instance_id' => $instance->id

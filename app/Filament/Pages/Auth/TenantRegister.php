@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages\Auth;
 
-use Filament\Pages\Auth\Register;
+use Filament\Auth\Pages\Register;
 use App\Models\Organizacion;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\Select;
@@ -36,7 +36,7 @@ class TenantRegister extends Register
         return [
             'form' => $this->form(
                 $this->makeForm()
-                    ->schema([
+                    ->components([
                         $this->getNameFormComponent(),
                         $this->getEmailFormComponent(),
                         $this->getPasswordFormComponent(),

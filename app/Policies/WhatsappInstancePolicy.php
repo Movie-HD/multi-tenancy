@@ -1,108 +1,70 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
-use App\Models\User;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use App\Models\WhatsappInstance;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class WhatsappInstancePolicy
 {
     use HandlesAuthorization;
-
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    
+    public function viewAny(AuthUser $authUser): bool
     {
-        return $user->can('view_any_whatsapp::instance');
+        return $authUser->can('ViewAny:WhatsappInstance');
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, WhatsappInstance $whatsappInstance): bool
+    public function view(AuthUser $authUser, WhatsappInstance $whatsappInstance): bool
     {
-        return $user->can('view_whatsapp::instance');
+        return $authUser->can('View:WhatsappInstance');
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
+    public function create(AuthUser $authUser): bool
     {
-        return $user->can('create_whatsapp::instance');
+        return $authUser->can('Create:WhatsappInstance');
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, WhatsappInstance $whatsappInstance): bool
+    public function update(AuthUser $authUser, WhatsappInstance $whatsappInstance): bool
     {
-        return $user->can('update_whatsapp::instance');
+        return $authUser->can('Update:WhatsappInstance');
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, WhatsappInstance $whatsappInstance): bool
+    public function delete(AuthUser $authUser, WhatsappInstance $whatsappInstance): bool
     {
-        return $user->can('delete_whatsapp::instance');
+        return $authUser->can('Delete:WhatsappInstance');
     }
 
-    /**
-     * Determine whether the user can bulk delete.
-     */
-    public function deleteAny(User $user): bool
+    public function restore(AuthUser $authUser, WhatsappInstance $whatsappInstance): bool
     {
-        return $user->can('delete_any_whatsapp::instance');
+        return $authUser->can('Restore:WhatsappInstance');
     }
 
-    /**
-     * Determine whether the user can permanently delete.
-     */
-    public function forceDelete(User $user, WhatsappInstance $whatsappInstance): bool
+    public function forceDelete(AuthUser $authUser, WhatsappInstance $whatsappInstance): bool
     {
-        return $user->can('force_delete_whatsapp::instance');
+        return $authUser->can('ForceDelete:WhatsappInstance');
     }
 
-    /**
-     * Determine whether the user can permanently bulk delete.
-     */
-    public function forceDeleteAny(User $user): bool
+    public function forceDeleteAny(AuthUser $authUser): bool
     {
-        return $user->can('force_delete_any_whatsapp::instance');
+        return $authUser->can('ForceDeleteAny:WhatsappInstance');
     }
 
-    /**
-     * Determine whether the user can restore.
-     */
-    public function restore(User $user, WhatsappInstance $whatsappInstance): bool
+    public function restoreAny(AuthUser $authUser): bool
     {
-        return $user->can('restore_whatsapp::instance');
+        return $authUser->can('RestoreAny:WhatsappInstance');
     }
 
-    /**
-     * Determine whether the user can bulk restore.
-     */
-    public function restoreAny(User $user): bool
+    public function replicate(AuthUser $authUser, WhatsappInstance $whatsappInstance): bool
     {
-        return $user->can('restore_any_whatsapp::instance');
+        return $authUser->can('Replicate:WhatsappInstance');
     }
 
-    /**
-     * Determine whether the user can replicate.
-     */
-    public function replicate(User $user, WhatsappInstance $whatsappInstance): bool
+    public function reorder(AuthUser $authUser): bool
     {
-        return $user->can('{{ Replicate }}');
+        return $authUser->can('Reorder:WhatsappInstance');
     }
 
-    /**
-     * Determine whether the user can reorder.
-     */
-    public function reorder(User $user): bool
-    {
-        return $user->can('{{ Reorder }}');
-    }
 }

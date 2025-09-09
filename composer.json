@@ -39,7 +39,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
             "@php artisan filament:upgrade",
-            "php -r \"file_exists('patches/CreateRole.php') && copy('patches/CreateRole.php', 'vendor/bezhansalleh/filament-shield/src/Resources/RoleResource/Pages/CreateRole.php');\"",
+            "php -r \"file_exists('patches/HasNavigation.php') && copy('patches/HasNavigation.php', 'vendor/bezhansalleh/filament-plugin-essentials/src/Concerns/Plugin/HasNavigation.php');\"",
             "php -r \"file_exists('patches/RoleResource.php') && copy('patches/RoleResource.php', 'vendor/bezhansalleh/filament-shield/src/Resources/RoleResource.php');\""
         ],
         "post-update-cmd": [
